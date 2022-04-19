@@ -6,6 +6,8 @@ int main(int argc, char* argv[]) {
 
 	QApplication a(argc, argv);
 	MiniDraw w;
+	//w.setIconSize(QSize(20,20));
+	w.setWindowIcon(QIcon(":/MiniDraw/res/minidraw.bmp"));
 	w.show();
 	return a.exec();
 }

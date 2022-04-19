@@ -7,5 +7,5 @@ public:
 	Line();
 	~Line();
 
-	void Draw(QPainter& painter);
+	void Draw(QPainter& painter) const override;
 };

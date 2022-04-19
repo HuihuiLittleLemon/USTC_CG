@@ -5,9 +5,12 @@
 #include "Shape.h"
 #include "Line.h"
 #include "Rect.h"
+#include "Ellipse.h"
+#include "Polygon.h"
+#include "FreeCurve.h"
 
-#include <qevent.h>
-#include <qpainter.h>
+#include <Qevent>
+#include <Qpainter>
 #include <QWidget>
 
 #include <vector>
@@ -31,7 +34,6 @@ private:
 	Shape* shape_;
 	std::vector<Shape*> shape_list_;
 
-
 public:
 	void mousePressEvent(QMouseEvent* event);
 	void mouseMoveEvent(QMouseEvent* event);
@@ -43,5 +45,9 @@ signals:
 public slots:
 	void setLine();
 	void setRect();
+	void setEllipse();
+	void setPolygon();
+	void setFreeCurve();
+	void undo();
 
 };
