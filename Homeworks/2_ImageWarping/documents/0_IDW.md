@@ -8,10 +8,10 @@
 
 ## 算法原理
 
-局部插值函数 $\mathbf{f} _ i(\mathbf{p}):\mathbb{R}^2\to\mathbb{R}^2$ 满足 $f _ i(\mathbf{p} _ i)=\mathbf{q} _ i$，具体为
+局部插值函数 $\mathbf{f} _ i(\mathbf{x}):\mathbb{R}^2\to\mathbb{R}^2$ 满足 $f _ i(\mathbf{p} _ i)=\mathbf{q} _ i$，具体为
 
 $$
-\mathbf{f} _ i(\mathbf{p})=\mathbf{q} _ i+\mathbf{D} _ i(\mathbf{p}-\mathbf{q} _ i)
+\mathbf{f} _ i(\mathbf{x})=\mathbf{q} _ i+\mathbf{D} _ i(\mathbf{x}-\mathbf{p} _ i)
 $$
 其中 $\mathbf{D} _ i:\mathbb{R}^2\to\mathbb{R}^2$，满足 $\mathbf{D} _ i(\mathbf{0})=\mathbf{0}$ 
 
@@ -26,7 +26,7 @@ $$
 其中 $w _ i:\mathbb{R}^2\to\mathbb{R}$，为
 
 $$
-w _ i(\mathbf{x})=\frac{\sigma _ i(\mathbf{x})}{\sum _ {j=1}^n \sigma _ j(\mathbf{p})}
+w _ i(\mathbf{x})=\frac{\sigma _ i(\mathbf{x})}{\sum _ {j=1}^n \sigma _ j(\mathbf{x})}
 $$
 
 $$
@@ -37,15 +37,15 @@ $$
 
 显然 $0\le w _ i(\pmb{x})\le 1$，且 $\sum _ {i=1}^n w _ i(\mathbf{x})=1$ 
 
-简单地，可直接取 $\mathbf{D} _ i=\mathbf{0}$，此时 $\mathbf{f}(\mathbf{x})=\sum _ {i=1}^n w _ i(\mathbf{x})\mathbf{q} _ i$ 
+简单地，可直接取 $\mathbf{D} _ i=\mathbf{I}$，此时 $\mathbf{f}(\mathbf{x})=\sum _ {i=1}^n w _ i(\mathbf{x})(\mathbf{q} _ i+\mathbf{x}-\mathbf{p}_ i)$ 
 
 定义能量
 
 $$
 \begin{aligned}
 E _ i(\mathbf{D} _ i)
-=&\sum _ {j=1,j\neq i}^n w _ {ij}\left\Vert\mathbf{q} _ i+\left(\begin{array}{c}d _ {i,11} & d _ {i,12}\newline d _ {i,21} & d _ {i,22}\end{array}\right)(\mathbf{p} _ j-\mathbf{p} _ i)-\mathbf{q} _ j\right\Vert^2\newline
-=&\sum _ {j=1,j\neq i}^n w _ {ij}(
+=&\sum _ {j=1,j\neq i}^n \sigma _ i(\mathbf{p}_ j)\left\Vert\mathbf{q} _ i+\left(\begin{array}{c}d _ {i,11} & d _ {i,12}\newline d _ {i,21} & d _ {i,22}\end{array}\right)(\mathbf{p} _ j-\mathbf{p} _ i)-\mathbf{q} _ j\right\Vert^2\newline
+=&\sum _ {j=1,j\neq i}^n \sigma _ i(\mathbf{p}_ j)(
 (d _ {i,11}(p _ {j,1}-p _ {i,1})+d _ {i,12}(p _ {j,2}-p _ {i,2})+q _ {i,1}-q _ {j,1})^2+\newline
 &(d _ {i,21}(p _ {j,1}-p _ {i,1})+d _ {i,22}(p _ {j,2}-p _ {i,2})+q _ {i,2}-q _ {j,2})^2)
 \end{aligned}
