@@ -1,4 +1,6 @@
 #include "mainwindow.h"
+#include "IDW.h"
+
 #include <QtWidgets>
 #include <QImage>
 #include <QPainter>
@@ -39,7 +41,7 @@ void MainWindow::paintEvent(QPaintEvent* paintevent)
 void MainWindow::CreateActions()
 {
 	action_new_ = new QAction(QIcon(":/MainWindow/Resources/images/new.jpg"), tr("&New"), this);
-	action_new_->setShortcut(QKeySequence::New);
+	action_new_->setShortcut(QKeySequence::New);					//设置快捷键，不同平台默认值不同，基本上都是Ctrl+N
 	action_new_->setStatusTip(tr("Create a new file"));
 	// connect ...
 
@@ -77,6 +79,18 @@ void MainWindow::CreateActions()
 	action_restore_ = new QAction(tr("Restore"), this);
 	action_restore_->setStatusTip(tr("Show origin image"));
 	connect(action_restore_, &QAction::triggered, imagewidget_, &ImageWidget::Restore);
+
+	action_set_anchor_ = new QAction(tr("&SetAnchor"), this);
+	action_set_anchor_->setStatusTip(tr("Set anchor points"));
+	connect(action_set_anchor_, &QAction::triggered, imagewidget_, &ImageWidget::set_seting_anchor_points_flag);
+
+	action_IDW_ = new QAction(tr("&IDW"), this);
+	action_IDW_->setStatusTip(tr("Warping with IDW method"));
+	connect(action_IDW_, &QAction::triggered, imagewidget_, &ImageWidget::warping_with_IDW);
+
+	action_RBF_ = new QAction(tr("&RBF"), this);
+	action_RBF_->setStatusTip(tr("Warping with RBF method"));
+	connect(action_RBF_, &QAction::triggered, imagewidget_, &ImageWidget::warping_with_RBF);
 }
 
 void MainWindow::CreateMenus()
@@ -88,12 +102,16 @@ void MainWindow::CreateMenus()
 	menu_file_->addAction(action_save_);
 	menu_file_->addAction(action_saveas_);
 
+
 	menu_edit_ = menuBar()->addMenu(tr("&Edit"));
 	menu_edit_->setStatusTip(tr("Edit menu"));
 	menu_edit_->addAction(action_invert_);
 	menu_edit_->addAction(action_mirror_);
 	menu_edit_->addAction(action_gray_);
 	menu_edit_->addAction(action_restore_);
+	menu_edit_->addAction(action_set_anchor_);
+	menu_edit_->addAction(action_IDW_);
+	menu_edit_->addAction(action_RBF_);
 }
 
 void MainWindow::CreateToolBars()
@@ -109,6 +127,9 @@ void MainWindow::CreateToolBars()
 	toolbar_file_->addAction(action_mirror_);
 	toolbar_file_->addAction(action_gray_);
 	toolbar_file_->addAction(action_restore_);
+	toolbar_file_->addAction(action_set_anchor_);
+	toolbar_file_->addAction(action_IDW_);
+	toolbar_file_->addAction(action_RBF_);
 }
 
 void MainWindow::CreateStatusBar()
