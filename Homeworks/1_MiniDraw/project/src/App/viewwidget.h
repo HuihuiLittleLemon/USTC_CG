@@ -7,7 +7,7 @@
 #include "Rect.h"
 #include "Ellipse.h"
 #include "Polygon.h"
-#include "FreeCurve.h"
+#include "FreeHand.h"
 
 #include <Qevent>
 #include <Qpainter>

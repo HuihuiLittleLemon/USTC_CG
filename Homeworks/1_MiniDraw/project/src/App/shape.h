@@ -6,9 +6,10 @@ class Shape {
 public:
 	Shape();
 	virtual ~Shape();
-	virtual void Draw(QPainter& paint)const = 0;
+	virtual void Draw(QPainter& paint) = 0;
 	void set_start(QPoint s);
 	void set_end(QPoint e);
+	void myswap(int& x, int& y);
 
 public:
 	enum Type {

@@ -9,5 +9,6 @@ int main(int argc, char* argv[]) {
 	//w.setIconSize(QSize(20,20));
 	w.setWindowIcon(QIcon(":/MiniDraw/res/minidraw.bmp"));
 	w.show();
+
 	return a.exec();
 }

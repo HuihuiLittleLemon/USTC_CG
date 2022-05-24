@@ -7,5 +7,5 @@ public:
 	Line();
 	~Line();
 
-	void Draw(QPainter& painter) const override;
+	void Draw(QPainter& painter) override;//draw line with Bresenham algorithm
 };

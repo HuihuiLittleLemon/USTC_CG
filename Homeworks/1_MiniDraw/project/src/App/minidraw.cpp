@@ -40,7 +40,7 @@ void MiniDraw::Creat_Action() {
 	connect(Action_Polygon, &QAction::triggered, view_widget_, &ViewWidget::setPolygon);
 
 	Action_FreeCurve = new QAction(tr("&FreeHand"), this);
-	Action_FreeCurve->setIcon(QIcon(":/MiniDraw/res/FreeCurve.bmp"));
+	Action_FreeCurve->setIcon(QIcon(":/MiniDraw/res/FreeHand.bmp"));
 	connect(Action_FreeCurve, &QAction::triggered, view_widget_, &ViewWidget::setFreeCurve);
 
 	Action_Del = new QAction(tr("&Undo"), this);

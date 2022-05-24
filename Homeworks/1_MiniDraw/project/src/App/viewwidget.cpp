@@ -79,7 +79,7 @@ void ViewWidget::mousePressEvent(QMouseEvent* event)
 			((myPolygon*)shape_)->drawComplete = false; //多边形绘制完成标志初始化，右键点击时置true
 			break;
 		case Shape::kFreeCurve:
-			shape_ = new FreeCurve();	
+			shape_ = new FreeHand();	
 			break;
 		case Shape::kDefault:
 			break;
@@ -104,11 +104,11 @@ void ViewWidget::mouseMoveEvent(QMouseEvent* event)
 		end_point_ = event->pos();
 		shape_->set_end(end_point_);
 
-		//FreeCurve模式下，每次鼠标移动都记录鼠标当前位置
+		//FreeHand模式下，每次鼠标移动都记录鼠标当前位置
 		if (type_ == Shape::kFreeCurve)
 		{
 			QPoint* mid_point_ = new QPoint(end_point_);
-			((FreeCurve*)shape_)->ponit_list_.push_back(mid_point_);
+			((FreeHand*)shape_)->point_list_.push_back(mid_point_);
 		}
 		update();
 	}
@@ -123,7 +123,7 @@ void ViewWidget::mouseReleaseEvent(QMouseEvent* event)
 			if (Qt::LeftButton == event->button())
 			{
 				QPoint* mid_point_ = new QPoint(event->pos());
-				((myPolygon*)shape_)->ponit_list_.push_back(mid_point_);
+				((myPolygon*)shape_)->point_list_.push_back(mid_point_);
 				return;
 			}
 
@@ -142,7 +142,7 @@ void ViewWidget::mouseReleaseEvent(QMouseEvent* event)
 void ViewWidget::paintEvent(QPaintEvent*)
 {
 	QPainter painter(this);
-
+		
 	for (int i = 0; i < shape_list_.size(); i++)
 	{
 		shape_list_[i]->Draw(painter);

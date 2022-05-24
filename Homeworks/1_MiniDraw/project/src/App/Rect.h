@@ -7,6 +7,6 @@ public:
 	Rect();
 	~Rect();
 
-	void Draw(QPainter& painter)const override;
+	void Draw(QPainter& painter) override;
 };
 

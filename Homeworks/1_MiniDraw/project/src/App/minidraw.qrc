@@ -1,18 +1,12 @@
 <RCC>
     <qresource prefix="/MiniDraw">
-        <file>res/Ellipse.png</file>
-        <file>res/FreeCurve.png</file>
-        <file>res/Line.png</file>
-        <file>res/Polygon.png</file>
-        <file>res/Rect.png</file>
-        <file>res/Help.png</file>
         <file>res/minidraw.bmp</file>
         <file>res/Delete.bmp</file>
         <file>res/Ellipse.bmp</file>
-        <file>res/FreeCurve.bmp</file>
         <file>res/Help.bmp</file>
         <file>res/Line.bmp</file>
         <file>res/Polygon.bmp</file>
         <file>res/Rect.bmp</file>
+        <file>res/FreeHand.bmp</file>
     </qresource>
 </RCC>
