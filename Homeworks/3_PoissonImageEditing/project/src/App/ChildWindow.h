@@ -8,9 +8,7 @@ class QRect;
 class ImageWidget;
 QT_END_NAMESPACE
 
-class ChildWindow :
-	public QMainWindow
-{
+class ChildWindow : public QMainWindow {
 	Q_OBJECT
 
 public:

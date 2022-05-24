@@ -27,7 +27,7 @@ private slots:
 	void Open();								// Open an existing file
 	void Save();								// Save image to file
 	void SaveAs();
-	ChildWindow *CreateChildWindow();
+	ChildWindow *CreateChildWindow(const QString filename);
 	void SetActiveSubWindow(QWidget* window);
 
 	// Image Processing
@@ -37,8 +37,10 @@ private slots:
 	void Restore();								// Restore image to origin
 
 	// Poisson Image Editing
-	void ChooseRect();							// Choose rectangle region
-	void Paste();								// Paste rect region to object image
+	void choose_rect();							// Choose rectangle region
+	void choose_polygon();						// Choose polygon region
+	void clone();								// clone rect region to object image
+	void mixing_clone();
 
 private:
 	void CreateActions();
@@ -48,8 +50,7 @@ private:
 
 	QMdiSubWindow *FindChild(const QString &filename);
 	ChildWindow* GetChildWindow();
-	
-private:
+private:							
 	Ui::MainWindowClass ui;
 
 	QMenu						*menu_file_;
@@ -67,9 +68,11 @@ private:
 	QAction						*action_gray_;
 	QAction						*action_restore_;
 
+	QAction						*action_choose_rect_;
 	QAction						*action_choose_polygon_;
 	QAction						*action_copy_;
-	QAction						*action_paste_;
+	QAction						*action_clone_;
+	QAction						*action_mixing_clone_;
 
 	QMdiArea					*mdi_area_;
 	QSignalMapper				*window_mapper_;

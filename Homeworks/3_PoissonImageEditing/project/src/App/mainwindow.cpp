@@ -3,12 +3,11 @@
 #include "ChildWindow.h"
 #include "ImageWidget.h"
 #include <iostream>
+#include <QMdiArea> 
 
 using namespace std;
 
-MainWindow::MainWindow(QWidget* parent)
-	: QMainWindow(parent)
-{
+MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
 	//ui.setupUi(this);
 
 	mdi_area_ = new QMdiArea;
@@ -25,18 +24,16 @@ MainWindow::MainWindow(QWidget* parent)
 	CreateStatusBar();
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
 
 }
 
-void MainWindow::CreateActions()
-{
+void MainWindow::CreateActions() {
 	// 	action_new_ = new QAction(QIcon(":/MainWindow/Resources/images/new.png"), tr("&New"), this);
 	// 	action_new_->setShortcut(QKeySequence::New);
 	// 	action_new_->setStatusTip(tr("Create a new file"));
 
-		// File IO
+	// File IO
 	action_open_ = new QAction(QIcon(":/MainWindow/Resources/images/open.jpg"), tr("&Open..."), this);
 	action_open_->setShortcuts(QKeySequence::Open);
 	action_open_->setStatusTip(tr("Open an existing file"));
@@ -70,15 +67,20 @@ void MainWindow::CreateActions()
 	connect(action_restore_, SIGNAL(triggered()), this, SLOT(Restore()));
 
 	// Poisson image editting
-	action_choose_polygon_ = new QAction(tr("RectChoose"), this);
-	connect(action_choose_polygon_, SIGNAL(triggered()), this, SLOT(ChooseRect()));
+	action_choose_rect_ = new QAction(tr("RectChoose"), this);
+	connect(action_choose_rect_, SIGNAL(triggered()), this, SLOT(choose_rect()));
 
-	action_paste_ = new QAction(tr("Paste"), this);
-	connect(action_paste_, SIGNAL(triggered()), this, SLOT(Paste()));
+	action_choose_polygon_ = new QAction(tr("PolygonChoose"), this);
+	connect(action_choose_polygon_, SIGNAL(triggered()), this, SLOT(choose_polygon()));
+
+	action_clone_ = new QAction(tr("Clone"), this);
+	connect(action_clone_, SIGNAL(triggered()), this, SLOT(clone()));
+
+	action_mixing_clone_ = new QAction(tr("MixingClone "), this);
+	connect(action_mixing_clone_, SIGNAL(triggered()), this, SLOT(mixing_clone()));
 }
 
-void MainWindow::CreateMenus()
-{
+void MainWindow::CreateMenus() {
 	menu_file_ = menuBar()->addMenu(tr("&File"));
 	menu_file_->setStatusTip(tr("File menu"));
 	//	menu_file_->addAction(action_new_);
@@ -86,7 +88,7 @@ void MainWindow::CreateMenus()
 	menu_file_->addAction(action_save_);
 	menu_file_->addAction(action_saveas_);
 
-	//	menu_file_->addAction(action_choose_polygon_);
+	//	menu_file_->addAction(action_choose_rect_);
 
 	menu_edit_ = menuBar()->addMenu(tr("&Edit"));
 	menu_edit_->setStatusTip(tr("Edit menu"));
@@ -94,10 +96,11 @@ void MainWindow::CreateMenus()
 	menu_edit_->addAction(action_mirror_);
 	menu_edit_->addAction(action_gray_);
 	menu_edit_->addAction(action_restore_);
+	menu_edit_->addAction(action_clone_);
+	menu_edit_->addAction(action_mixing_clone_);
 }
 
-void MainWindow::CreateToolBars()
-{
+void MainWindow::CreateToolBars() {
 	toolbar_file_ = addToolBar(tr("File"));
 	// toolbar_file_->addAction(action_new_);
 	toolbar_file_->addAction(action_open_);
@@ -112,8 +115,10 @@ void MainWindow::CreateToolBars()
 
 	// Poisson Image Editing
 	toolbar_file_->addSeparator();
+	toolbar_file_->addAction(action_choose_rect_);
 	toolbar_file_->addAction(action_choose_polygon_);
-	toolbar_file_->addAction(action_paste_);
+	toolbar_file_->addAction(action_clone_);
+	toolbar_file_->addAction(action_mixing_clone_);
 }
 
 void MainWindow::CreateStatusBar()
@@ -121,22 +126,19 @@ void MainWindow::CreateStatusBar()
 	statusBar()->showMessage(tr("Ready"));
 }
 
-void MainWindow::Open()
-{
-	QString filename = QFileDialog::getOpenFileName(this);
+void MainWindow::Open() {
+	QString filename = QFileDialog::getOpenFileName(this,tr("Read Image"),"../data", tr("Images(*.bmp *.png *.jpg)"));
 	if (!filename.isEmpty())
 	{
 		QMdiSubWindow* existing = FindChild(filename);
 
-		if (existing)
-		{
+		if (existing) {
 			mdi_area_->setActiveSubWindow(existing);
 			return;
 		}
 
-		ChildWindow* child = CreateChildWindow();
-		if (child->LoadFile(filename))
-		{
+		ChildWindow* child = CreateChildWindow(filename);
+		if (child->LoadFile(filename)) {
 			statusBar()->showMessage(tr("File loaded"), 2000);
 			child->show();
 
@@ -145,17 +147,16 @@ void MainWindow::Open()
 			int y = child->geometry().y();
 			int width = child->imagewidget_->ImageWidth();
 			int height = child->imagewidget_->ImageHeight();
+
 			mdi_area_->activeSubWindow()->setFixedSize(width + 2 * x, height + x + y);
 		}
-		else
-		{
+		else {
 			child->close();
 		}
 	}
 }
 
-void MainWindow::Save()
-{
+void MainWindow::Save() {
 	SaveAs();
 }
 
@@ -167,93 +168,98 @@ ChildWindow* MainWindow::GetChildWindow() {
 	return qobject_cast<ChildWindow*>(activeSubWindow->widget());
 }
 
-void MainWindow::SaveAs()
-{
+void MainWindow::SaveAs() {
 	ChildWindow* window = GetChildWindow();
 	if (!window)
 		return;
 	window->imagewidget_->SaveAs();
 }
 
-ChildWindow* MainWindow::CreateChildWindow()
-{
+ChildWindow* MainWindow::CreateChildWindow(const QString filename) {
+	QString canonical_filepath = QFileInfo(filename).canonicalFilePath();
 	ChildWindow* child = new ChildWindow;
 	mdi_area_->addSubWindow(child);
-
+	child->current_file_ = canonical_filepath;
 	return child;
 }
 
-void MainWindow::SetActiveSubWindow(QWidget* window)
-{
-	if (!window)
-	{
+void MainWindow::SetActiveSubWindow(QWidget* window) {
+	if (!window) {
 		return;
 	}
 
 	mdi_area_->setActiveSubWindow(qobject_cast<QMdiSubWindow*>(window));
 }
 
-void MainWindow::Invert()
-{
+void MainWindow::Invert() {
 	ChildWindow* window = GetChildWindow();
 	if (!window)
 		return;
 	window->imagewidget_->Invert();
 }
 
-void MainWindow::Mirror()
-{
+void MainWindow::Mirror() {
 	ChildWindow* window = GetChildWindow();
 	if (!window)
 		return;
 	window->imagewidget_->Mirror();
 }
 
-void MainWindow::GrayScale()
-{
+void MainWindow::GrayScale() {
 	ChildWindow* window = GetChildWindow();
 	if (!window)
 		return;
 	window->imagewidget_->TurnGray();
 }
 
-void MainWindow::Restore()
-{
+void MainWindow::Restore() {
 	ChildWindow* window = GetChildWindow();
 	if (!window)
 		return;
 	window->imagewidget_->Restore();
 }
 
-void MainWindow::ChooseRect()
-{
+void MainWindow::choose_rect() {
 	// Set source child window
 	ChildWindow* window = GetChildWindow();
 	if (!window)
 		return;
-	window->imagewidget_->set_draw_status_to_choose();
+	window->imagewidget_->set_draw_status_to_choose_rect();
 	child_source_ = window;
 }
 
-void MainWindow::Paste()
-{
+void MainWindow::choose_polygon() {
+	ChildWindow* window = GetChildWindow();
+	if (!window)
+		return;
+	window->imagewidget_->set_draw_status_to_choose_polygon();
+	child_source_ = window;
+}
+
+void MainWindow::clone() {
 	// Paste image rect region to object image
 	ChildWindow* window = GetChildWindow();
 	if (!window)
 		return;
-	window->imagewidget_->set_draw_status_to_paste();
+	window->imagewidget_->set_draw_status_to_clone();
 	window->imagewidget_->set_source_window(child_source_);
 }
 
-QMdiSubWindow *MainWindow::FindChild(const QString &filename)
-{
+void MainWindow::mixing_clone() {
+	// Paste image rect region to object image
+	ChildWindow* window = GetChildWindow();
+	if (!window)
+		return;
+	window->imagewidget_->set_draw_status_to_clone(true);
+	window->imagewidget_->set_source_window(child_source_);
+}
+
+QMdiSubWindow *MainWindow::FindChild(const QString &filename) {
 	QString canonical_filepath = QFileInfo(filename).canonicalFilePath();
 
-	foreach (QMdiSubWindow *window, mdi_area_->subWindowList())
-	{
+	foreach (QMdiSubWindow *window, mdi_area_->subWindowList()) {
 		ChildWindow *child = qobject_cast<ChildWindow *>(window->widget());
-		if (child->current_file() == canonical_filepath)
-		{
+		if (child->current_file() == canonical_filepath) {
 			return window;
 		}
 	}
