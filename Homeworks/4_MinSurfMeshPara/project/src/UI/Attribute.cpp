@@ -358,15 +358,31 @@ void Attribute::ComponentVisitor::ImplVisit(Ptr<TriMesh> mesh) {
 		pOGLW->DirtyVAO(mesh);
 	});
 
-	grid->AddButton("Minimize Surface", [mesh, pOGLW = attr->pOGLW]() {
+	grid->AddButton("Minimize Surface By Uniform Weight", [mesh, pOGLW = attr->pOGLW]() {
 		auto minSurf = MinSurf::New(mesh);
-		minSurf->Run();
+		if (minSurf->Run(true))
+			printf("MinSurf done\n");
 		pOGLW->DirtyVAO(mesh);
 	});
 
-	grid->AddButton("Paramaterize", [mesh, pOGLW = attr->pOGLW]() {
+	grid->AddButton("Minimize Surface By Cotangent Weight", [mesh, pOGLW = attr->pOGLW]() {
+		auto minSurf = MinSurf::New(mesh);
+		if (minSurf->Run(false))
+			printf("MinSurf done\n");
+		pOGLW->DirtyVAO(mesh);
+	});
+
+
+	grid->AddButton("Paramaterize By Uniform Weight", [mesh, pOGLW = attr->pOGLW]() {
 		auto paramaterize = Paramaterize::New(mesh);
-		if (paramaterize->Run())
+		if (paramaterize->Run(true))
+			printf("Paramaterize done\n");
+		pOGLW->DirtyVAO(mesh);
+	});
+
+	grid->AddButton("Paramaterize By Cotangent Weight", [mesh, pOGLW = attr->pOGLW]() {
+		auto paramaterize = Paramaterize::New(mesh);
+		if (paramaterize->Run(false))
 			printf("Paramaterize done\n");
 		pOGLW->DirtyVAO(mesh);
 	});

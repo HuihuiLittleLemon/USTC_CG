@@ -53,8 +53,8 @@ $$
 
 权重选取方法
 
-- Uniform weight (geometry oblivious): $w_j = 1$ 
-- Cotangent weight (geometry aware): $w_j =  (\cot \alpha + \cot\beta)$ 
+- Uniform weight (geometry oblivious，无视几何): $w_j = 1$ 
+- Cotangent weight (geometry aware，几何感知): $w_j =  (\cot \alpha + \cot\beta)$ 
 - Normalization: $\overline{w}_j=w_j/\sum_k w_k$ 
 
 ## 2. 极小曲面

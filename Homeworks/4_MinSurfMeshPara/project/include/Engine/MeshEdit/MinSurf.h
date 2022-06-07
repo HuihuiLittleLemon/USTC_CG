@@ -4,6 +4,12 @@
 #include <UHEMesh/HEMesh.h>
 #include <UGM/UGM>
 
+#include <Eigen/Dense>
+#include <Eigen/Sparse>
+#include <Eigen/SparseCholesky>
+
+using namespace Eigen;
+
 namespace Ubpa {
 	class TriMesh;
 	class Paramaterize;
@@ -23,11 +29,7 @@ namespace Ubpa {
 		bool Init(Ptr<TriMesh> triMesh);
 
 		// call it after Init()
-		bool Run();
-
-	private:
-		// kernel part of the algorithm
-		void Minimize();
+		bool Run(bool is_uniform_weight);
 
 	private:
 		class V;
@@ -40,9 +42,26 @@ namespace Ubpa {
 		class E : public TEdge<V, E, P> { };
 		class P :public TPolygon<V, E, P> { };
 	private:
+
+		// kernel part of the algorithm
+		ComputationInfo  sparse_matrix_preprocess();
+		void solve_sparse_matrix();
+		void solve_sparse_matrix(std::unordered_map<size_t, vecf3> boundary_vertices_map_on_circle);
+		void Minimize(bool is_uniform_weight);
+		void Minimize(bool is_uniform_weight, std::unordered_map<size_t, vecf3> boundary_vertices_map_on_circle);
+		float vecf_dot(vecf3 first, vecf3 second);
+		vecf3 vecf_cross(vecf3 first, vecf3 second);
+		float calc_wij(V* centre, V* adj);
+	private:
 		friend class Paramaterize;
 
+		SimplicialLLT<SparseMatrix<float>> solver_sparse_;
+		SparseMatrix<float> A_saprse_;
 		Ptr<TriMesh> triMesh;
 		const Ptr<HEMesh<V>> heMesh; // vertice order is same with triMesh
+		bool is_uniform_weight_;
+		int inner_vertices_num_;
+		std::unordered_map<size_t, V*> boundary_vertices_;
+		std::unordered_map<size_t, int> inner_vertices_index_map_matrix_colum_;
 	};
 }
