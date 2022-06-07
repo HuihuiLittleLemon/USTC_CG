@@ -58,6 +58,18 @@ void ViewWidget::undo()
 	}
 }
 
+void ViewWidget::fill()
+{
+	if (!shape_list_.empty())
+	{
+		if (type_ == Shape::kPolygon)
+		{
+			((myPolygon*)shape_list_.back())->fill_region = true;
+			update();
+		}
+	}
+}
+
 void ViewWidget::mousePressEvent(QMouseEvent* event)
 {
 	if (Qt::LeftButton == event->button()&& draw_status_ == false)

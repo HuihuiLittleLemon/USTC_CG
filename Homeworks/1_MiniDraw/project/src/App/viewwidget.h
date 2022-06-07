@@ -49,5 +49,5 @@ public slots:
 	void setPolygon();
 	void setFreeCurve();
 	void undo();
-
+	void fill();
 };

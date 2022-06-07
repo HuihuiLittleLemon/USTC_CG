@@ -39,13 +39,17 @@ void MiniDraw::Creat_Action() {
 	Action_Polygon->setIcon(QIcon(":/MiniDraw/res/Polygon.bmp"));
 	connect(Action_Polygon, &QAction::triggered, view_widget_, &ViewWidget::setPolygon);
 
-	Action_FreeCurve = new QAction(tr("&FreeHand"), this);
-	Action_FreeCurve->setIcon(QIcon(":/MiniDraw/res/FreeHand.bmp"));
-	connect(Action_FreeCurve, &QAction::triggered, view_widget_, &ViewWidget::setFreeCurve);
+	Action_FreeHand = new QAction(tr("&FreeHand"), this);
+	Action_FreeHand->setIcon(QIcon(":/MiniDraw/res/FreeHand.bmp"));
+	connect(Action_FreeHand, &QAction::triggered, view_widget_, &ViewWidget::setFreeCurve);
 
 	Action_Del = new QAction(tr("&Undo"), this);
 	Action_Del->setIcon(QIcon(":/MiniDraw/res/Delete.bmp"));
 	connect(Action_Del, &QAction::triggered, view_widget_, &ViewWidget::undo);
+
+	Action_Fill = new QAction(tr("&Fill"), this);
+	Action_Fill->setIcon(QIcon(":/MiniDraw/res/Fill.bmp"));
+	connect(Action_Fill, &QAction::triggered, view_widget_, &ViewWidget::fill);
 }
 
 void MiniDraw::Creat_ToolBar() {
@@ -55,8 +59,9 @@ void MiniDraw::Creat_ToolBar() {
 	pToolBar->addAction(Action_Rect);
 	pToolBar->addAction(Action_Ellipse);
 	pToolBar->addAction(Action_Polygon);
-	pToolBar->addAction(Action_FreeCurve);
+	pToolBar->addAction(Action_FreeHand);
 	pToolBar->addAction(Action_Del);
+	pToolBar->addAction(Action_Fill);
 }
 
 void MiniDraw::Creat_Menu() {
@@ -66,8 +71,9 @@ void MiniDraw::Creat_Menu() {
 	pMenu->addAction(Action_Rect);
 	pMenu->addAction(Action_Ellipse);
 	pMenu->addAction(Action_Polygon);
-	pMenu->addAction(Action_FreeCurve);
+	pMenu->addAction(Action_FreeHand);
 	pMenu->addAction(Action_Del);
+	pMenu->addAction(Action_Fill);
 }
 
 void MiniDraw::Creat_StatusBar() {

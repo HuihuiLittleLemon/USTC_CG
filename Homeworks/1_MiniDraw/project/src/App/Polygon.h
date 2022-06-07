@@ -4,7 +4,7 @@ class myPolygon :public Shape {
 public:
 	std::vector<QPoint*> point_list_;
 	bool drawComplete;
-
+	bool fill_region;
 public:
 	myPolygon();
 	~myPolygon();

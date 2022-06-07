@@ -8,5 +8,6 @@
         <file>res/Polygon.bmp</file>
         <file>res/Rect.bmp</file>
         <file>res/FreeHand.bmp</file>
+        <file>res/Fill.bmp</file>
     </qresource>
 </RCC>

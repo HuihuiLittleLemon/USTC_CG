@@ -22,10 +22,11 @@ public:
 	QAction* Action_Rect;
 	QAction* Action_Ellipse;
 	QAction* Action_Polygon;
-	QAction* Action_FreeCurve;
+	QAction* Action_FreeHand;
 
 	QLabel* infoLabel;
 	QAction* Action_Del;
+	QAction* Action_Fill;
 	QTimer* timer;
 
 	void Creat_Menu();

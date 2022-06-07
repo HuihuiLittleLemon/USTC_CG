@@ -1,7 +1,7 @@
 #include "Polygon.h"
 
 myPolygon::myPolygon() {
-
+	fill_region = false;
 }
 
 myPolygon::~myPolygon() {
@@ -24,7 +24,9 @@ void myPolygon::Draw(QPainter& painter) {
 	if (this->drawComplete == true)
 	{
 		painter.drawLine(start, end);
-		fill(painter);
+		if (fill_region == true){
+			fill(painter);
+		}
 	}
 
 	painter.drawLine(end_, end);
@@ -191,9 +193,6 @@ void myPolygon::fill(QPainter& painter) {
  		}
 
 		std::vector<int> x_list;
-		QPen pen;
-		pen.setColor(Qt::blue);
-		painter.setPen(pen);
 		int max_y = edges_list[0].end_y;
 		int min_y = edges_list[0].start_y;
 		for (size_t i = 0; i < edges_list.size();i++ ) {
