@@ -58,7 +58,7 @@ $$
 
 上述的克隆方法使得目标图像在区域$\Omega$中的信息全部丢失了。如下图的场景，![image-20220524180152944](C:\Users\little lemon\AppData\Roaming\Typora\typora-user-images\image-20220524180152944.png)
 
-当源图像中有孔，或者我们希望保持目标图像的纹理时，混合梯度是比较好的选择。混合梯度是指在$\Omega$中的每一点处选择$f^*$和$g$中梯度变化较强的那个作为$\mathbf v$，即
+当源图像中有孔，或者我们希望保持目标图像的纹理时，混合梯度是比较好的选择。混合梯度是指在$\Omega$中的每一点处选择$f^*$和$g$中梯度模较大的那个作为$\mathbf v$，即
 $$
 \mathbf v(\mathbf x)= \begin{cases} 
 \nabla f^*(\mathbf x),  & \text{if }|\nabla f^*(\mathbf x)|>|\nabla g(\mathbf x)| \\
@@ -75,13 +75,11 @@ $$
 
 ![image-20220524183207479](C:\Users\little lemon\AppData\Roaming\Typora\typora-user-images\image-20220524183207479.png)
 
-### 3.3 白缝
-
-#### 3.4 预处理
+#### 3.5 预处理
 
 从公式$(2)$得知,稀疏矩阵由源图像中决定，所以可以先预处理该矩阵（比较费时间），当在目标图像中粘贴时，随着鼠标移动动态生成方程的右值，再求解出发$f$，绘制出来，达到实时刷新的效果。
 
-#### 3.5 内存泄漏误报
+#### 3.6 内存泄漏误报
 
 添加Opencv的库文件，`CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) | _CRTDBG_LEAK_CHECK_DF)`会误报内存泄漏
 
