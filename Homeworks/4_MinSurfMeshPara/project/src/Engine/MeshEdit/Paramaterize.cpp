@@ -78,28 +78,12 @@ bool Paramaterize::Run(bool is_uniform_weight) {
 	//// half-edge structure -> triangle mesh
 	size_t nV = minSurf->heMesh->NumVertices();
 	size_t nF = minSurf->heMesh->NumPolygons();
-	vector<pointf2> texcoords;
-	vector<unsigned> indice;
 
-for (auto v : minSurf->heMesh->Vertices()) {
-		texcoords.push_back({ v->pos[0], v->pos[1] });
+	for (auto v : minSurf->heMesh->Vertices()) {
+		texcoords_.push_back({ v->pos[0], v->pos[1] });
 	}
 
-	triMesh->Update(texcoords);
-	
-
-	//vector<pointf3> positions;
-	//vector<unsigned> indice;
-	//positions.reserve(nV);
-	//indice.reserve(3 * nF);
-	//for (auto v : minSurf->heMesh->Vertices())
-	//	positions.push_back(v->pos.cast_to<pointf3>());
-	//for (auto f : minSurf->heMesh->Polygons()) { // f is triangle
-	//	for (auto v : f->BoundaryVertice()) // vertices of the triangle
-	//		indice.push_back(static_cast<unsigned>(minSurf->heMesh->Index(v)));
-	//}
-
-	//triMesh->Init(indice, positions);
+	triMesh->Update(texcoords_);
 
 	return true;
 }
@@ -107,7 +91,13 @@ for (auto v : minSurf->heMesh->Vertices()) {
 bool Paramaterize::map_trimesh_boundary_vertices_to_unit_circle() {
 	V *boundary_vertice_begin = nullptr;
 	V *boundary_vertice = nullptr;
+	V *end_vertices;
 	std::vector<V*> boundary_vertices_array;
+	std::vector<float> chord_length;
+	float total_length = 0.0f;
+	float edge_distance = 0.0f;
+	float arc_theta = 0.0f;
+
 	//find an boundary vertice
 	for (auto v : heMesh->Vertices()) {
 		if (v->IsBoundary()) {
@@ -121,33 +111,30 @@ bool Paramaterize::map_trimesh_boundary_vertices_to_unit_circle() {
 		return false;
 	}
 
-	boundary_vertice = boundary_vertice_begin;
+	boundary_vertice = boundary_vertice_begin; 
 	do {
-		for (auto v : boundary_vertice->AdjVertices()) {
-			if (v->IsBoundary() && find(boundary_vertices_array.begin(), boundary_vertices_array.end(), v) == boundary_vertices_array.end()) {
+		for (auto v : boundary_vertice->AdjEdges()) {
+			end_vertices = (v->HalfEdge()->End() != boundary_vertice) ? v->HalfEdge()->End() : v->HalfEdge()->Origin();
+			if (v->IsBoundary() && find(boundary_vertices_array.begin(), boundary_vertices_array.end(), end_vertices) == boundary_vertices_array.end()) {
 				//array not contain the begin vertice,so prevent second vertice's connected boundary vertice search back to the begin vertice
-				if (boundary_vertices_array.size() == 1 && v == boundary_vertice_begin) {
+				if (boundary_vertices_array.size() == 1 && end_vertices == boundary_vertice_begin) {
 					continue;
 				}
-				boundary_vertices_array.push_back(v);
-				boundary_vertice = v;
+				boundary_vertices_array.push_back(end_vertices);
+				boundary_vertice = end_vertices;
 				break;
 			}
 		}
 	} while (boundary_vertice != boundary_vertice_begin);
 	printf("Paramaterize::boundary vertices array size:%zd\n", boundary_vertices_array.size());
-	std::vector<float> chord_length;
-	float total_length = 0.0f;
-	float edge_distance = 0.0f;
-	float arc_theta = 0.0f;
+
 	for (size_t i = 0; i < boundary_vertices_array.size();i++) {	
 		if (i == boundary_vertices_array.size() - 1) {
-			edge_distance = distance(boundary_vertices_array[0]->pos, boundary_vertices_array[i]->pos);
+			edge_distance = (boundary_vertices_array[0]->pos-boundary_vertices_array[i]->pos).norm();
 		}
 		else {
-			edge_distance = distance(boundary_vertices_array[i]->pos, boundary_vertices_array[i + 1]->pos);
+			edge_distance = (boundary_vertices_array[i]->pos - boundary_vertices_array[i + 1]->pos).norm();
 		}
-
 		total_length += edge_distance;
 		chord_length.push_back(total_length);
 	}
@@ -161,9 +148,4 @@ bool Paramaterize::map_trimesh_boundary_vertices_to_unit_circle() {
 
 	//map trimesh boundary vertices to unit square by chord length
 	//printf("Paramaterize::boundary vertices array size:%f  %f\n", total_length,chord_length.back());
-}
-
-float Paramaterize::distance(vecf3 begin, vecf3 end) {
-	float norm = (end[0] - begin[0]) * (end[0] - begin[0]) + (end[1] - begin[1]) * (end[1] - begin[1]) + (end[2] - begin[2]) * (end[2] - begin[2]);
-	return sqrt(norm);
 }

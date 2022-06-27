@@ -54,6 +54,7 @@ namespace Ubpa {
 		float calc_wij(V* centre, V* adj);
 	private:
 		friend class Paramaterize;
+		friend class ARAP;
 
 		SimplicialLLT<SparseMatrix<float>> solver_sparse_;
 		SparseMatrix<float> A_saprse_;

@@ -6,7 +6,7 @@
 
 namespace Ubpa {
 	class TriMesh;
-	class MinSurf;
+	//class MinSurf;
 
 	// mesh boundary == 1
 	class Paramaterize : public HeapObj {
@@ -30,13 +30,15 @@ namespace Ubpa {
 	public:
 		void Clear();
 		bool Init(Ptr<TriMesh> triMesh);
-		float distance(vecf3 begin, vecf3 end);
 		bool map_trimesh_boundary_vertices_to_unit_circle();
 		bool Run(bool is_uniform_weight);
 
 	private:
+		friend class ARAP;
+
 		Ptr<TriMesh> triMesh;
 		const Ptr<HEMesh<V>> heMesh; // vertice order is same with triMesh
 		std::unordered_map<size_t, vecf3> boundary_vertices_map_on_circle_pos_;
+		std::vector<pointf2> texcoords_;
 	};
 }
