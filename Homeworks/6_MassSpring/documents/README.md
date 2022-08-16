@@ -44,7 +44,7 @@ $$
 $$
 \boldsymbol y =\boldsymbol x_n + h\boldsymbol v_n + h^2\boldsymbol M^{-1}\boldsymbol f_{ext}, \tag{*}
 $$
-则原问题转化为求解关于$\boldsymbol x$的方程：
+显然$\boldsymbol y$由第$n$帧数据决定，是个已知量。原问题转化为求解关于$\boldsymbol x$的方程：
 $$
 \boldsymbol g(\boldsymbol x) = \boldsymbol M(\boldsymbol x-\boldsymbol y) -h^2\boldsymbol f_{int}(\boldsymbol x) = 0,
 $$
@@ -100,7 +100,7 @@ $$
 $$
 故对方程$(*)$的求解可以转为为一个最小化问题：
 $$
-\boldsymbol x_{n+1}=\min\limits_{x}\frac{1}{2}(\boldsymbol x-\boldsymbol y)^T\boldsymbol M(\boldsymbol x-\boldsymbol y)+h^2E(\boldsymbol x)
+\boldsymbol x_{n+1}=arg \min\limits_{x}\frac{1}{2}(\boldsymbol x-\boldsymbol y)^T\boldsymbol M(\boldsymbol x-\boldsymbol y)+h^2E(\boldsymbol x)
 $$
 同时对于弹簧的弹性势能可以描述为一个最小化问题：
 $$
@@ -108,7 +108,7 @@ $$
 $$
 从而原问题转化为：
 $$
-\boldsymbol x_{n+1}=\min\limits_{x,\boldsymbol d\in\boldsymbol U}\frac{1}{2}\boldsymbol x^T(\boldsymbol M+h^2\boldsymbol L)\boldsymbol x-h^2\boldsymbol x^T\boldsymbol J \boldsymbol d-\boldsymbol x^T \boldsymbol M \boldsymbol y
+\boldsymbol x_{n+1}=arg \min\limits_{x,\boldsymbol d\in\boldsymbol U}\frac{1}{2}\boldsymbol x^T(\boldsymbol M+h^2\boldsymbol L)\boldsymbol x-h^2\boldsymbol x^T\boldsymbol J \boldsymbol d-\boldsymbol x^T \boldsymbol M \boldsymbol y
 $$
 其中
 $$
