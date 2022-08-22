@@ -36,13 +36,13 @@ end for
 
 步长取0.002，劲度系数取100时，固定上边界，网格在重力作用下向下运动，产生很大形变，
 
-![stiff=100EulorSemiImplicit(12fps)](F:\CG\USTC_CG\Homeworks\6_MassSpring\report\mass_spring.assets\stiff=100EulorSemiImplicit(12fps).gif)
+<img src="F:\CG\USTC_CG\Homeworks\6_MassSpring\report\mass_spring.assets\stiff=100EulorSemiImplicit(12fps).gif" alt="stiff=100EulorSemiImplicit(12fps)" style="zoom:50%;" />
 
 而且从网格形变可以看出，左边形变大于右侧形变，这是由于网格剖分非对称导致的。
 
 尝试增大劲度系数到10000，使其运动起来像布料
 
-![stiff=10000_EulorSemiImplicit(12fps)](F:\CG\USTC_CG\Homeworks\6_MassSpring\report\mass_spring.assets\stiff=10000_EulorSemiImplicit(12fps).gif)
+<img src="F:\CG\USTC_CG\Homeworks\6_MassSpring\report\mass_spring.assets\stiff=10000_EulorSemiImplicit(12fps).gif" alt="stiff=10000_EulorSemiImplicit(12fps)" style="zoom:50%;" />
 
 当步长取0.033时，仿真总是发散，欧拉显示方法简单，能带来仿真的实时性，但稳定性差。
 
@@ -103,11 +103,11 @@ $$
 
 步长取0.033，劲度系数取100时，固定上边界，仿真收敛，且得到跟欧拉半隐式方法相同的结果，弊端也是显而易见的，出现了明显的卡顿，注意到$\nabla \boldsymbol g(\boldsymbol x^{(k)})$ 是系数矩阵，它求逆很快，可以断定延时主要是由于每次迭代都要重新生成$\boldsymbol g(\boldsymbol x^{(k)})和$$\nabla \boldsymbol g(\boldsymbol x^{(k)})$ ，这无法改善。另外，牛顿法迭代法在初始值选择不合理的情况下，偶尔也会发散。
 
-![stiff=100_EulorImplicit(12fps)](F:\CG\USTC_CG\Homeworks\6_MassSpring\report\mass_spring.assets\stiff=100_EulorImplicit(12fps).gif)
+<img src="F:\CG\USTC_CG\Homeworks\6_MassSpring\report\mass_spring.assets\stiff=100_EulorImplicit(12fps).gif" alt="stiff=100_EulorImplicit(12fps)" style="zoom:50%;" />
 
 另外，当网格规模较小时，仿真速度可以接受
 
-![stiff=100_EulorImplicit_sparse(12fps)](F:\CG\USTC_CG\Homeworks\6_MassSpring\report\mass_spring.assets\stiff=100_EulorImplicit_sparse(12fps).gif)
+<img src="F:\CG\USTC_CG\Homeworks\6_MassSpring\report\mass_spring.assets\stiff=100_EulorImplicit_sparse(12fps).gif" alt="stiff=100_EulorImplicit_sparse(12fps)" style="zoom:50%;" />
 
 ### 3.加速方法（projective dynamic)[^Liu13]
 
@@ -133,7 +133,7 @@ $$
 $$
 \boldsymbol U= \{ \boldsymbol d=(\boldsymbol d_1,\boldsymbol d_2,...,\boldsymbol d_s),\boldsymbol d_s\in R^3,||\boldsymbol d_i||=l_i \} (l_i为第i个弹簧原长),
 $$
-![remark](F:\CG\USTC_CG\Homeworks\6_MassSpring\report\mass_spring.assets\remark.png)
+<img src="F:\CG\USTC_CG\Homeworks\6_MassSpring\report\mass_spring.assets\remark.png" alt="remark" style="zoom:80%;" />
 
 显然利用矩阵分块乘法有$\boldsymbol L = ( \boldsymbol A * \boldsymbol D * \boldsymbol A^T) \bigotimes \boldsymbol  I_3$ ，其中$\boldsymbol A = \{ \boldsymbol A_1,\boldsymbol A_2,...,\boldsymbol A_s \}$，$\boldsymbol D =diag \{ k_1,k_2,...,k_s \}$,考虑到按照公式计算比较费时，可以直接构造出稀疏矩阵$\boldsymbol L$，同理$\boldsymbol J = (\boldsymbol A * \boldsymbol D * \boldsymbol S^T)\bigotimes \boldsymbol I_3$，$\boldsymbol S = \{ \boldsymbol S_1,\boldsymbol S_2,...,\boldsymbol S_s \} = I$,也可以直接构造得到。
 
@@ -152,11 +152,11 @@ $$
 
 步长取0.033，劲度系数取100时，固定上边界，可以看到加速方法非常流畅
 
-![stiff=100_Acc(12fps)](F:\CG\USTC_CG\Homeworks\6_MassSpring\report\mass_spring.assets\stiff=100_Acc(12fps).gif)
+<img src="F:\CG\USTC_CG\Homeworks\6_MassSpring\report\mass_spring.assets\stiff=100_Acc(12fps).gif" alt="stiff=100_Acc(12fps)" style="zoom:50%;" />
 
 再将劲度系数设为10000时，网格表现的像块布料
 
-![stiff=10000_Acc(12fps)](F:\CG\USTC_CG\Homeworks\6_MassSpring\report\mass_spring.assets\stiff=10000_Acc(12fps).gif)
+<img src="F:\CG\USTC_CG\Homeworks\6_MassSpring\report\mass_spring.assets\stiff=10000_Acc(12fps).gif" alt="stiff=10000_Acc(12fps)" style="zoom:50%;" />
 
 
 
