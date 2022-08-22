@@ -197,10 +197,10 @@ void advance(real dt) {
 }
 
 // Seed particles with position and color
-void add_object(Vec center, int c) {
+void add_object(Vec center, int c, Vec velocity = Vec(0.0_f)) {
   // Randomly sample 1000 particles in the square
   for (int i = 0; i < 1000; i++) {
-    particles.push_back(Particle((Vec::rand()*2.0f-Vec(1))*0.08f + center, c));
+      particles.push_back(Particle((Vec::rand() * 2.0f - Vec(1)) * 0.08f + center, c, velocity));
   }
 }
 
@@ -208,9 +208,9 @@ int main() {
   GUI gui("Real-time 2D MLS-MPM", window_size, window_size);
   auto &canvas = gui.get_canvas();
 
-  add_object(Vec(0.55,0.45), 0xED553B);
-  add_object(Vec(0.45,0.65), 0xF2B134);
-  add_object(Vec(0.55,0.85), 0x068587);
+  add_object(Vec(0.15,0.65), 0xED553B, Vec(10.0, 0.0));
+  add_object(Vec(0.85,0.65), 0xF2B134, Vec(-10.0, 0.0));
+  //add_object(Vec(0.55,0.85), 0x068587);
 
   int frame = 0;
 
@@ -224,7 +224,7 @@ int main() {
       // Clear background
       canvas.clear(0x112F41);
       // Box
-      canvas.rect(Vec(0.04), Vec(0.96)).radius(2).color(0x4FB99F).close();
+      canvas.rect(Vec(0.04), Vec(0.96)).radius(1).color(0x4FB99F).close();
       // Particles
       for (auto p : particles) {
         canvas.circle(p.x).radius(2).color(p.c);

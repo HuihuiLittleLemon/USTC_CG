@@ -152,9 +152,9 @@ void advance(real dt) {
     Vector2i base_coord = (p.x * inv_dx - Vec(0.5f)).cast<int>();
     Vec fx = p.x * inv_dx - base_coord.cast<real>();
     Vec w[3] = {
-                Vec(0.5) * sqr(Vec(1.5) - fx),
-                Vec(0.75) - sqr(fx - Vec(1.0)),
-                Vec(0.5) * sqr(fx - Vec(0.5))
+        Vec(0.5) * sqr(Vec(1.5) - fx),
+        Vec(0.75) - sqr(fx - Vec(1.0)),
+        Vec(0.5) * sqr(fx - Vec(0.5))
     };
 
     p.C = Mat(0);
